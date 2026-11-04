@@ -1,69 +1,159 @@
+<div align="center">
+
 # AliasOpti
 
-**A measurement-first performance skill for AI coding agents.**
+### Make the website feel faster. Know why it is faster.
 
-AliasOpti helps an agent investigate a slow website, prioritize observed bottlenecks, make targeted improvements, and verify both performance and functionality. It is a reusable set of instructions, not a scanner or a promise of a particular score.
+A practical performance skill for AI coding agents, built around measurement, focused fixes and verification.
 
-## What it does
+[Get started](#get-started) · [How it works](#how-it-works) · [Example output](#example-output) · [Troubleshooting](#troubleshooting)
 
-1. Establishes a baseline for important pages and interactions before changes.
-2. Uses real-user data where available, then reproduces issues with appropriate lab tools.
-3. Traces loading, responsiveness, layout shifts, assets, JavaScript, APIs, server and database performance.
-4. Ranks evidence-backed opportunities by user impact, confidence, effort and risk.
-5. Implements appropriate changes and checks features, accessibility and regressions.
-6. Reports comparable before-and-after measurements, tradeoffs and remaining unknowns.
+</div>
 
-### Core Web Vitals
+![AliasOpti workflow: measure, diagnose, improve, verify and explain](assets/workflow.svg)
 
-| Metric | Measures | Good field target |
+## Why AliasOpti?
+
+A page can have a good score and still feel slow. A checkout button may lag, a layout may jump while someone reads, or a page may load quickly only on a fast connection. Fixing those problems starts with understanding what real people experience.
+
+AliasOpti gives your coding agent a repeatable way to investigate. It establishes a baseline, finds the likely causes, improves the biggest verified bottlenecks and checks that important features still work. It keeps the focus on evidence and user experience.
+
+> **What it is:** a portable folder of instructions and reference material for a compatible AI coding agent.
+> **What it needs:** access to the website project or an accessible URL. Browser tools, real-user data and backend access improve the investigation when available. Installing the skill does not install those tools or guarantee a score.
+
+## How it works
+
+| Stage | What the agent does |
+| --- | --- |
+| **Measure** | Identify important routes and interactions; record available field data and a repeatable lab baseline. |
+| **Diagnose** | Inspect loading, responsiveness, layout shifts, network requests, assets and server behavior. |
+| **Improve** | Rank measured problems by impact and risk; make focused fixes in the permitted scope. |
+| **Verify** | Repeat comparable measurements and test key journeys, accessibility and regressions. |
+| **Explain** | Share results, evidence, commands run, limitations and remaining work. |
+
+The skill adapts to the tools and stack already present. It checks prerequisites and troubleshoots failures; it cannot promise to repair every environment or measure data it cannot access.
+
+## What it investigates
+
+- **Loading:** LCP element and its timing, oversized images, responsive formats, font loading, render-blocking resources and server response.
+- **Responsiveness:** slow clicks, taps and keyboard interactions, long tasks, expensive rendering and JavaScript bundles.
+- **Visual stability:** image dimensions, late content, fonts, embeds and layout shifts throughout the page lifecycle.
+- **Network and backend:** duplicate requests, waterfalls, API latency, caching, CDN delivery and slow queries when access permits.
+- **Real-world experience:** key journeys, mobile layouts, slower networks, cold and warm caches, and third-party costs.
+- **Reliability:** builds, relevant tests, error handling, privacy, security and data freshness after changes.
+
+### The metrics
+
+| Core Web Vital | What it tells you | Good target |
 | --- | --- | --- |
-| LCP | Main content loading | ≤ 2.5 seconds |
-| INP | Interaction responsiveness | ≤ 200 milliseconds |
-| CLS | Visual stability | ≤ 0.1 |
+| **LCP** | How quickly the main content appears | ≤ 2.5 seconds |
+| **INP** | How responsive interactions feel | ≤ 200 milliseconds |
+| **CLS** | How stable the layout is | ≤ 0.1 |
 
-Targets apply at the 75th percentile of real-user visits, segmented by mobile and desktop. Lighthouse's Total Blocking Time is a lab diagnostic, not field INP. See [Web Vitals](https://web.dev/articles/vitals).
+These targets are assessed at the **75th percentile of real-user visits**, separately for mobile and desktop. Lab tests help diagnose problems; they do not replace field data. Lighthouse's Total Blocking Time is a diagnostic, not field INP. [About Core Web Vitals](https://web.dev/articles/vitals).
 
-## Install
+## Get started
 
-You need Git and an agent that supports the Agent Skills format. Copy the **entire** `skills/aliasopti` folder, including `references`, into the agent's skills directory. The commands below create a project-level installation. Run them from your website project's root on macOS or Linux:
+### 1. Choose your agent and project
+
+Open a terminal in the root of the website you want to improve. You need **Git** and an agent that supports `SKILL.md` skills. The commands below work in macOS and Linux shells; on Windows, use Git Bash or translate them for PowerShell.
+
+### 2. Download AliasOpti
 
 ```sh
-git clone https://github.com/akshatkotharii/aliasopti.git /tmp/aliasopti-source
-mkdir -p .agents/skills
-cp -R /tmp/aliasopti-source/skills/aliasopti .agents/skills/
+git clone https://github.com/akshatkotharii/aliasopti.git
 ```
 
-This location works for Codex and current VS Code Copilot Agent Skills. For Claude Code, use its project skills directory instead:
+This creates an `aliasopti` folder inside your current directory. To keep the downloaded repository outside your project, run the command from a separate directory and adjust the source path below.
+
+### 3. Install for your agent
+
+Run **one** option from the website project root. Each copies the complete skill, including its references. If the destination exists, back it up or inspect it before replacing it.
+
+**Codex** — project skill directory:
+
+```sh
+mkdir -p .agents/skills
+cp -R aliasopti/skills/aliasopti .agents/skills/
+```
+
+**Claude Code** — project skill directory:
 
 ```sh
 mkdir -p .claude/skills
-cp -R /tmp/aliasopti-source/skills/aliasopti .claude/skills/
+cp -R aliasopti/skills/aliasopti .claude/skills/
 ```
 
-For GitHub Copilot in VS Code, `.github/skills/aliasopti` is another supported project location. Check your agent's documentation for personal/global locations and skill discovery behavior. Restart or refresh the agent session if needed. If the destination already exists, inspect it first; copying over an existing directory may preserve stale files. To update, review the new version and replace the complete skill directory.
+**GitHub Copilot in VS Code** — project skill directory:
 
-- [Codex skills](https://developers.openai.com/codex/skills/)
-- [Claude Code skills](https://code.claude.com/docs/en/skills)
-- [VS Code Agent Skills](https://code.visualstudio.com/docs/agent-customization/agent-skills)
+```sh
+mkdir -p .github/skills
+cp -R aliasopti/skills/aliasopti .github/skills/
+```
 
-## Use
+Verify that the destination contains `aliasopti/SKILL.md` and `aliasopti/references/`. Open the project in your agent and refresh or start a new session if it does not discover the skill. Follow the agent's own documentation for personal/global installations: [Codex](https://developers.openai.com/codex/skills/), [Claude Code](https://code.claude.com/docs/en/skills), [VS Code](https://code.visualstudio.com/docs/agent-customization/agent-skills).
 
-Open the website project in your agent and ask, for example:
+### 4. Ask for an audit
 
-> Use AliasOpti to audit and improve the homepage and checkout on mobile. Measure first, fix the biggest proven bottlenecks, and verify the important user flows.
+> Use AliasOpti to audit and improve this website. Focus on the homepage and checkout on mobile. Measure before changing anything, fix the biggest verified bottlenecks, and test the key flows.
 
-For a read-only review, say: “Use AliasOpti to audit this site. Do not change code.” You can also ask it to investigate one issue, such as a slow interaction or layout shifts. Available access determines what it can measure: a URL alone may not expose source code, real-user data, server traces or database queries. The skill must report those limits.
+Other useful requests:
 
-## Checks and tools
+- **Read-only:** “Use AliasOpti to investigate this site. Give me a prioritized report; do not change code.”
+- **Specific issue:** “Use AliasOpti to investigate why the product page shifts while loading.”
+- **Slow interaction:** “Use AliasOpti to trace the slow search interaction and verify any fix.”
 
-The playbook covers LCP timing phases; interaction traces and long tasks; post-load layout shifts; responsive images and font loading; bundle analysis and rendering; request waterfalls, caching, third parties and server/query profiling. It includes safe starting commands for asset sizes, response timing and Lighthouse where already installed. Tools and commands must be adapted to the project and permissions; no automatic production load testing.
+### 5. Review the results
 
-## Repository
+Look for the baseline, test conditions, evidence, changes, after measurements and functional checks. Ask the agent to explain missing measurements or unresolved failures. Field data may need time to accumulate after a deployment.
+
+## Example output
+
+The following is **illustrative only**, not a real audit or a claim of typical results.
 
 ```text
-skills/aliasopti/
-├── SKILL.md
-└── references/playbook.md
+Route: /products · mobile lab · cold cache · 3 runs
+
+Finding: Main image discovered late and larger than needed.
+Evidence: Network waterfall and LCP trace.
+Action: Serve a responsive image; make the LCP image discoverable early.
+Verification: Compare repeated LCP measurements and check image quality.
+Field INP: unavailable — no real-user data was provided.
+Tests: product navigation and cart flow checked; build passed.
 ```
 
-Contributions are welcome. Explain the problem, evidence and tradeoffs for new checks; link primary sources when guidance changes. Keep instructions focused on improvements that users can feel.
+A real report should show actual measurements, the environment and any failures, instead of filling gaps with estimates.
+
+## Tools and prerequisites
+
+The skill itself has **no runtime dependencies**. Available diagnostics depend on the site and agent environment. Chrome DevTools can run Lighthouse without a separate CLI installation. For the optional Lighthouse CLI you need compatible Node.js and Chrome; follow [Chrome's installation guidance](https://developer.chrome.com/docs/lighthouse/overview/). Use the project's existing package manager, scripts and lockfile. Database analysis requires appropriate access and permissions. Do not send private URLs or credentials to public audit tools.
+
+## Troubleshooting
+
+| Problem | Check |
+| --- | --- |
+| Agent cannot find AliasOpti | Confirm the correct project directory, complete skill folder and agent-specific path; refresh the session. |
+| `git clone` fails or folder exists | Check Git/network access; choose a fresh folder or update an existing clone with Git. |
+| Website will not start | Follow the project's setup instructions, inspect runtime versions, required environment variables and port conflicts. Keep secrets private. |
+| Lighthouse cannot run | Check Chrome availability and, for CLI use, compatible Node.js and Lighthouse. DevTools is an alternative. |
+| Field data is unavailable | Record that limitation. Lab tests can still diagnose issues, but cannot establish real-user percentiles. |
+| A fix breaks a test or makes performance worse | Inspect the failure, revise or revert the change, and repeat the affected checks. |
+
+The agent has a fuller [error-recovery guide](skills/aliasopti/references/troubleshooting.md) for handling setup, measurement and verification failures.
+
+## Repository structure
+
+```text
+aliasopti/
+├── README.md
+├── assets/workflow.svg
+└── skills/aliasopti/
+    ├── SKILL.md
+    └── references/
+        ├── playbook.md
+        └── troubleshooting.md
+```
+
+## Contributing
+
+AliasOpti is intended to improve as we learn. Propose focused checks, clearer workflows or fixes backed by evidence and primary sources. Explain tradeoffs and avoid stack-specific assumptions. Open an issue or pull request with context and a reproducible example.

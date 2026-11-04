@@ -23,3 +23,7 @@ Aim for **LCP ≤ 2.5 s, INP ≤ 200 ms, CLS ≤ 0.1** at the **75th percentile 
 ## Investigation details
 
 Read the playbook's additional diagnostics and practical commands when profiling, including LCP phase breakdown, interaction timing, post-load shifts, navigation cache, backend latency and safe command use. Select checks based on available evidence; never present unrun commands or missing field data as results. Use existing project tooling when possible. Record repeated-run conditions and the exact route, commit and environment. Avoid profiling production with synthetic load or exposing sensitive URLs and data.
+
+## Recover from errors and verify setup
+
+Before running diagnostics, identify the project root, package manager, lockfile, runtime versions, available browser and testing tools, start command, and applicable permissions. Read [references/troubleshooting.md](references/troubleshooting.md) when setup, measurement, build, tests, or changes fail. Check exit codes and actual output, diagnose the cause, apply the smallest safe correction, and rerun the affected check. Preserve existing project configuration and dependencies. Do not repeatedly install packages, alter unrelated configuration, expose private URLs to third parties, or claim a fix without verification. If a prerequisite cannot be resolved within access or scope, continue independent checks and report the blocker, its effect, and the next action.
