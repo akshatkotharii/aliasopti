@@ -19,3 +19,7 @@ Make websites feel faster for real people. Treat scores as diagnostics, not the 
 ## Targets
 
 Aim for **LCP ≤ 2.5 s, INP ≤ 200 ms, CLS ≤ 0.1** at the **75th percentile of real-user visits**, segmented by mobile and desktop. Thresholds are guides, not guarantees of a good experience; measure important journeys and business-specific outcomes too. Use current official documentation if metrics or tooling may have changed.
+
+## Investigation details
+
+Read the playbook's additional diagnostics and practical commands when profiling, including LCP phase breakdown, interaction timing, post-load shifts, navigation cache, backend latency and safe command use. Select checks based on available evidence; never present unrun commands or missing field data as results. Use existing project tooling when possible. Record repeated-run conditions and the exact route, commit and environment. Avoid profiling production with synthetic load or exposing sensitive URLs and data.
