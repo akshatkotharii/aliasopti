@@ -4,7 +4,7 @@
 
 ### Make the website feel faster. Know why it is faster.
 
-A practical performance skill for AI coding agents, built around measurement, focused fixes and verification.
+A portable performance skill for compatible AI agents, built around measurement, focused fixes and verification.
 
 [Get started](#get-started) · [How it works](#how-it-works) · [Example output](#example-output) · [Troubleshooting](#troubleshooting)
 
@@ -82,6 +82,12 @@ From the AliasOpti repository, run **one** command. Replace the example path wit
 
 # GitHub Copilot in VS Code
 ./scripts/install.sh copilot "/absolute/path/to/your-website"
+
+# Gemini CLI
+./scripts/install.sh gemini "/absolute/path/to/your-website"
+
+# Other compatible agents: pass their existing skills directory
+./scripts/install.sh custom "/absolute/path/to/agent-skills-directory"
 ```
 
 The script checks the source files, refuses to overwrite an existing installation, copies the entire skill and checks the copied files. It does not install software or modify your website's application code.
@@ -91,8 +97,10 @@ The script checks the source files, refuses to overwrite an existing installatio
 | Codex | `.agents/skills/aliasopti/` |
 | Claude Code | `.claude/skills/aliasopti/` |
 | GitHub Copilot in VS Code | `.github/skills/aliasopti/` |
+| Gemini CLI | `.gemini/skills/aliasopti/` |
+| Other skill-compatible agents | `aliasopti/` within the chosen skills directory |
 
-Each destination contains `SKILL.md` and `references/` with both playbook and troubleshooting guides. Open **your website project**, not the AliasOpti checkout, in your agent. Refresh its skill list or start a new session if needed. Check [Codex](https://developers.openai.com/codex/skills/), [Claude Code](https://code.claude.com/docs/en/skills) or [VS Code](https://code.visualstudio.com/docs/agent-customization/agent-skills) for current discovery and personal-scope options.
+Each destination contains `SKILL.md` and `references/` with both playbook and troubleshooting guides. Open **your website project**, not the AliasOpti checkout, in your agent. Refresh its skill list or start a new session if needed. Check [Codex](https://developers.openai.com/codex/skills/), [Claude Code](https://code.claude.com/docs/en/skills) or [VS Code](https://code.visualstudio.com/docs/agent-customization/agent-skills) for current discovery and personal-scope options. For Gemini CLI, see [its skills guide](https://geminicli.com/docs/cli/using-agent-skills/); use `/skills list` and `/skills reload` to verify discovery.
 
 **Updating:** In your AliasOpti checkout, run `git pull --ff-only`. The installer intentionally refuses to overwrite an existing copy. Review and back up your existing skill folder, move it elsewhere, then run the installer again. This preserves any local changes and avoids stale files. Repeat for each project where it was installed.
 
@@ -131,7 +139,7 @@ A real report should show actual measurements, the environment and any failures,
 
 ## Tools and prerequisites
 
-The skill itself has **no runtime dependencies**. Available diagnostics depend on the site and agent environment. Chrome DevTools can run Lighthouse without a separate CLI installation. For the optional Lighthouse CLI you need compatible Node.js and Chrome; follow [Chrome's installation guidance](https://developer.chrome.com/docs/lighthouse/overview/). Use the project's existing package manager, scripts and lockfile. Database analysis requires appropriate access and permissions. Do not send private URLs or credentials to public audit tools.
+AliasOpti follows the portable Agent Skills folder format. Agents differ in discovery, permissions, available tools and skill support, so universal compatibility cannot be guaranteed. For an agent without skill support, give it `SKILL.md` and the referenced files as context; automatic discovery is unavailable. The skill itself has **no runtime dependencies**. Available diagnostics depend on the site and agent environment. Chrome DevTools can run Lighthouse without a separate CLI installation. For the optional Lighthouse CLI you need compatible Node.js and Chrome; follow [Chrome's installation guidance](https://developer.chrome.com/docs/lighthouse/overview/). Use the project's existing package manager, scripts and lockfile. Database analysis requires appropriate access and permissions. Do not send private URLs or credentials to public audit tools.
 
 ## Troubleshooting
 
