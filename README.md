@@ -54,44 +54,49 @@ These targets are assessed at the **75th percentile of real-user visits**, separ
 
 ## Get started
 
-### 1. Choose your agent and project
+### 1. Prerequisites
 
-Open a terminal in the root of the website you want to improve. You need **Git** and an agent that supports `SKILL.md` skills. The commands below work in macOS and Linux shells; on Windows, use Git Bash or translate them for PowerShell.
+Install Git and a compatible coding agent. You need the path to your existing website project. The installer works with macOS, Linux and Git Bash on Windows. It installs only the skill files; browser, Lighthouse, application dependencies and data access are separate and optional according to your audit.
 
-### 2. Download AliasOpti
+### 2. Download the repository
+
+Run these commands in a location **outside** your website project. Use a folder name that does not already exist:
 
 ```sh
 git clone https://github.com/akshatkotharii/aliasopti.git
+cd aliasopti
 ```
 
-This creates an `aliasopti` folder inside your current directory. To keep the downloaded repository outside your project, run the command from a separate directory and adjust the source path below.
+You are now inside the AliasOpti repository. Keep your website in its own folder; this avoids nesting one Git repository inside another.
 
-### 3. Install for your agent
+### 3. Install into your website project
 
-Run **one** option from the website project root. Each copies the complete skill, including its references. If the destination exists, back it up or inspect it before replacing it.
-
-**Codex** — project skill directory:
+From the AliasOpti repository, run **one** command. Replace the example path with the actual absolute path to your website project; keep the quotes if it contains spaces.
 
 ```sh
-mkdir -p .agents/skills
-cp -R aliasopti/skills/aliasopti .agents/skills/
+# Codex
+./scripts/install.sh codex "/absolute/path/to/your-website"
+
+# Claude Code
+./scripts/install.sh claude "/absolute/path/to/your-website"
+
+# GitHub Copilot in VS Code
+./scripts/install.sh copilot "/absolute/path/to/your-website"
 ```
 
-**Claude Code** — project skill directory:
+The script checks the source files, refuses to overwrite an existing installation, copies the entire skill and checks the copied files. It does not install software or modify your website's application code.
 
-```sh
-mkdir -p .claude/skills
-cp -R aliasopti/skills/aliasopti .claude/skills/
-```
+| Agent | Installed path inside your website project |
+| --- | --- |
+| Codex | `.agents/skills/aliasopti/` |
+| Claude Code | `.claude/skills/aliasopti/` |
+| GitHub Copilot in VS Code | `.github/skills/aliasopti/` |
 
-**GitHub Copilot in VS Code** — project skill directory:
+Each destination contains `SKILL.md` and `references/` with both playbook and troubleshooting guides. Open **your website project**, not the AliasOpti checkout, in your agent. Refresh its skill list or start a new session if needed. Check [Codex](https://developers.openai.com/codex/skills/), [Claude Code](https://code.claude.com/docs/en/skills) or [VS Code](https://code.visualstudio.com/docs/agent-customization/agent-skills) for current discovery and personal-scope options.
 
-```sh
-mkdir -p .github/skills
-cp -R aliasopti/skills/aliasopti .github/skills/
-```
+**Updating:** In your AliasOpti checkout, run `git pull --ff-only`. The installer intentionally refuses to overwrite an existing copy. Review and back up your existing skill folder, move it elsewhere, then run the installer again. This preserves any local changes and avoids stale files. Repeat for each project where it was installed.
 
-Verify that the destination contains `aliasopti/SKILL.md` and `aliasopti/references/`. Open the project in your agent and refresh or start a new session if it does not discover the skill. Follow the agent's own documentation for personal/global installations: [Codex](https://developers.openai.com/codex/skills/), [Claude Code](https://code.claude.com/docs/en/skills), [VS Code](https://code.visualstudio.com/docs/agent-customization/agent-skills).
+**Manual installation:** Copy `skills/aliasopti` from this repository to the agent's skills directory shown above. Keep the folder structure intact; `SKILL.md` must be directly inside the installed `aliasopti` folder. Do not copy only the markdown file.
 
 ### 4. Ask for an audit
 
@@ -147,6 +152,7 @@ The agent has a fuller [error-recovery guide](skills/aliasopti/references/troubl
 aliasopti/
 ├── README.md
 ├── assets/workflow.svg
+├── scripts/install.sh
 └── skills/aliasopti/
     ├── SKILL.md
     └── references/
