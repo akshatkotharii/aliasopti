@@ -54,57 +54,54 @@ These targets are assessed at the **75th percentile of real-user visits**, separ
 
 ## Get started
 
-### 1. Prerequisites
+### 1. Install with the Skills CLI
 
-Install Git and a compatible coding agent. You need the path to your existing website project. The installer works with macOS, Linux and Git Bash on Windows. It installs only the skill files; browser, Lighthouse, application dependencies and data access are separate and optional according to your audit.
-
-### 2. Download the repository
-
-Run these commands in a location **outside** your website project. Use a folder name that does not already exist:
+You need [Node.js](https://nodejs.org/) 22.20 or later (includes `npx`), Git, and a supported coding agent. Open a terminal **inside your website project**, then run:
 
 ```sh
-git clone https://github.com/akshatkotharii/aliasopti.git
-cd aliasopti
+npx skills add akshatkotharii/aliasopti --skill aliasopti
 ```
 
-You are now inside the AliasOpti repository. Keep your website in its own folder; this avoids nesting one Git repository inside another.
-
-### 3. Install into your website project
-
-From the AliasOpti repository, run **one** command. Replace the example path with the actual absolute path to your website project; keep the quotes if it contains spaces.
+Follow the prompts to choose your agent and installation preferences. The CLI installs to the current project by default. To make it available across projects, add `--global`:
 
 ```sh
-# Codex
-./scripts/install.sh codex "/absolute/path/to/your-website"
-
-# Claude Code
-./scripts/install.sh claude "/absolute/path/to/your-website"
-
-# GitHub Copilot in VS Code
-./scripts/install.sh copilot "/absolute/path/to/your-website"
-
-# Gemini CLI
-./scripts/install.sh gemini "/absolute/path/to/your-website"
-
-# Other compatible agents: pass their existing skills directory
-./scripts/install.sh custom "/absolute/path/to/agent-skills-directory"
+npx skills add akshatkotharii/aliasopti --skill aliasopti --global
 ```
 
-The script checks the source files, refuses to overwrite an existing installation, copies the entire skill and checks the copied files. It does not install software or modify your website's application code.
+You can target an agent explicitly; for example:
 
-| Agent | Installed path inside your website project |
-| --- | --- |
-| Codex | `.agents/skills/aliasopti/` |
-| Claude Code | `.claude/skills/aliasopti/` |
-| GitHub Copilot in VS Code | `.github/skills/aliasopti/` |
-| Gemini CLI | `.gemini/skills/aliasopti/` |
-| Other skill-compatible agents | `aliasopti/` within the chosen skills directory |
+```sh
+npx skills add akshatkotharii/aliasopti --skill aliasopti --agent codex
+npx skills add akshatkotharii/aliasopti --skill aliasopti --agent claude-code
+npx skills add akshatkotharii/aliasopti --skill aliasopti --agent cursor
+```
 
-Each destination contains `SKILL.md` and `references/` with both playbook and troubleshooting guides. Open **your website project**, not the AliasOpti checkout, in your agent. Refresh its skill list or start a new session if needed. Check [Codex](https://developers.openai.com/codex/skills/), [Claude Code](https://code.claude.com/docs/en/skills) or [VS Code](https://code.visualstudio.com/docs/agent-customization/agent-skills) for current discovery and personal-scope options. For Gemini CLI, see [its skills guide](https://geminicli.com/docs/cli/using-agent-skills/); use `/skills list` and `/skills reload` to verify discovery.
+The CLI supports more agents; see its [supported agents list](https://github.com/vercel-labs/skills/blob/main/docs/agents.md). You can select multiple agents in the prompts. Avoid installing duplicate copies in different locations unless you understand your agent's precedence rules.
 
-**Updating:** In your AliasOpti checkout, run `git pull --ff-only`. The installer intentionally refuses to overwrite an existing copy. Review and back up your existing skill folder, move it elsewhere, then run the installer again. This preserves any local changes and avoids stale files. Repeat for each project where it was installed.
+### 2. Confirm installation
 
-**Manual installation:** Copy `skills/aliasopti` from this repository to the agent's skills directory shown above. Keep the folder structure intact; `SKILL.md` must be directly inside the installed `aliasopti` folder. Do not copy only the markdown file.
+```sh
+npx skills list
+```
+
+Run this from the project where you installed the skill. Open that project in your agent and check its skill list; refresh or start a new session if it does not appear. For a global install, use `npx skills list --global`. Discovery and invocation differ between agents, and the CLI's list does not by itself prove that your agent has loaded the skill.
+
+### 3. Update or remove
+
+```sh
+npx skills check
+npx skills update
+npx skills remove aliasopti
+```
+
+Review the CLI's prompts and scope. Use `--global` where applicable for global installations. See the [CLI documentation](https://github.com/vercel-labs/skills/blob/main/docs/commands.md) for current options. Install only from a source you trust; inspect this repository before adding it.
+
+<details>
+<summary>Manual installation alternative</summary>
+
+Clone this repository outside your website project. Copy the complete `skills/aliasopti` folder, including `references`, to your agent's documented skill directory. Or use `./scripts/install.sh` from the checkout; run it without arguments for options. Do not overwrite an existing skill without reviewing it. This manual method is not managed by the Skills CLI update command.
+
+</details>
 
 ### 4. Ask for an audit
 
@@ -146,7 +143,7 @@ AliasOpti follows the portable Agent Skills folder format. Agents differ in disc
 | Problem | Check |
 | --- | --- |
 | Agent cannot find AliasOpti | Confirm the correct project directory, complete skill folder and agent-specific path; refresh the session. |
-| `git clone` fails or folder exists | Check Git/network access; choose a fresh folder or update an existing clone with Git. |
+| `npx` or installation fails | Check Node.js version, npm and Git availability, network access and terminal output. See the [Skills CLI documentation](https://github.com/vercel-labs/skills/blob/main/docs/commands.md). |
 | Website will not start | Follow the project's setup instructions, inspect runtime versions, required environment variables and port conflicts. Keep secrets private. |
 | Lighthouse cannot run | Check Chrome availability and, for CLI use, compatible Node.js and Lighthouse. DevTools is an alternative. |
 | Field data is unavailable | Record that limitation. Lab tests can still diagnose issues, but cannot establish real-user percentiles. |
